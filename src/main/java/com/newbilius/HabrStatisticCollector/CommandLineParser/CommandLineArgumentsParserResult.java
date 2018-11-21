@@ -1,9 +1,23 @@
 package com.newbilius.HabrStatisticCollector.CommandLineParser;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CommandLineArgumentsParserResult {
     private HashMap<String, String> options = new HashMap<>();
+    private ArrayList<String> errors = new ArrayList<>();
+
+    public boolean haveError() {
+        return !errors.isEmpty();
+    }
+
+    public void addError(String error) {
+        errors.add(error);
+    }
+
+    public String[] getErrors() {
+        return errors.toArray(new String[0]);
+    }
 
     public void addOption(String arg, String argParam) {
         options.put(arg, argParam);

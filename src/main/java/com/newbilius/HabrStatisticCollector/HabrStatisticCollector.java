@@ -1,7 +1,7 @@
 package com.newbilius.HabrStatisticCollector;
 
 import com.google.gson.Gson;
-import com.newbilius.HabrStatisticCollector.CommandLineParser.CommandLineArgumentsParseException;
+import com.google.gson.stream.JsonReader;
 import com.newbilius.HabrStatisticCollector.CommandLineParser.CommandLineArgumentsParser;
 import com.newbilius.HabrStatisticCollector.CommandLineParser.CommandLineArgumentsParserResult;
 import com.newbilius.HabrStatisticCollector.CommandLineParser.Option;
@@ -9,6 +9,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -21,12 +22,26 @@ public class HabrStatisticCollector {
     private static String yearTo;
     private static boolean saveJson;
     private static boolean skipTags;
+    private static String jsonFileForLoading;
 
     public static void main(String[] args) {
         prepareOptions(args);
-        var parsedItems = parseData();
-        if (saveJson)
-            saveParsedItems(parsedItems);
+
+        HabrItem[] parsedItems = new HabrItem[0];
+
+        if (jsonFileForLoading.isBlank()) {
+            parsedItems = parseData();
+            if (saveJson)
+                saveParsedItems(parsedItems);
+        } else {
+            Gson gson = new Gson();
+            try {
+                var reader = new JsonReader(new FileReader(jsonFileForLoading));
+                parsedItems = gson.fromJson(reader, parsedItems.getClass());
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private static void saveParsedItems(HabrItem[] parsedItems) {
@@ -135,19 +150,24 @@ public class HabrStatisticCollector {
         var skipTagsOption = new Option("skipTags", false, false, "не загружает каждую статью для получения тегов");
         argsParser.addOption(skipTagsOption);
 
-        CommandLineArgumentsParserResult cmd = null;
-        try {
-            cmd = argsParser.parse(args);
-        } catch (CommandLineArgumentsParseException e) {
-            var errorMessage = e.getMessage();
-            if (errorMessage != null && !errorMessage.isBlank())
-                print(errorMessage);
+        var loadFromJsonOption = new Option("loadJson", false, true, "построить статистику по заранее загруженному JSON");
+        argsParser.addOption(loadFromJsonOption);
+
+        CommandLineArgumentsParserResult cmd = argsParser.parse(args);
+
+        if (cmd.haveValue(loadFromJsonOption)) {
+            jsonFileForLoading = cmd.getString(loadFromJsonOption, "");
+            if (!jsonFileForLoading.isBlank())
+                return;
+        }
+
+        if (cmd.haveError()) {
+            for (var error : cmd.getErrors()) {
+                print(error);
+            }
             argsParser.printHelp();
             System.exit(1);
         }
-
-        if (cmd == null)
-            return;
 
         url = cmd.getString(urlOption, "");
         var currentYear = Calendar.getInstance().get(Calendar.YEAR);

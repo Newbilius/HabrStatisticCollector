@@ -10,12 +10,15 @@ public class CommandLineArgumentsParser {
         options.add(option);
     }
 
-    public CommandLineArgumentsParserResult parse(String[] args)
-            throws CommandLineArgumentsParseException {
-
-        exitIfOnlyHelpParam(args);
-
+    public CommandLineArgumentsParserResult parse(String[] args) {
         var result = new CommandLineArgumentsParserResult();
+
+        var exitAndShowHelp = exitIfOnlyHelpParam(args);
+        if (exitAndShowHelp != null) {
+            result.addError(exitAndShowHelp);
+            return result;
+        }
+
         for (var i = 0; i < args.length; i++) {
             var arg = args[i].toLowerCase().trim();
             var commandOptional = options.stream()
@@ -23,15 +26,18 @@ public class CommandLineArgumentsParser {
                             || ("--" + x.param.toLowerCase()).equals(arg))
                     .findFirst();
 
-            if (!commandOptional.isPresent())
-                throw new CommandLineArgumentsParseException(getUnknownOptionExceptionText(arg));
+            if (!commandOptional.isPresent()) {
+                result.addError(getUnknownOptionExceptionText(arg));
+                continue;
+            }
+
             var command = commandOptional.get();
             if (command.withArgs) {
                 if (i + 1 >= args.length)
-                    throw new CommandLineArgumentsParseException(notSettedParamOfOptionExceptionText(arg));
+                    result.addError(notSettedParamOfOptionExceptionText(arg));
                 var argParam = args[i + 1];
                 if (argParam.startsWith("-"))
-                    throw new CommandLineArgumentsParseException(notSettedParamOfOptionExceptionText(arg));
+                    result.addError(notSettedParamOfOptionExceptionText(arg));
                 i++;
                 result.addOption(command.param, argParam);
             } else {
@@ -39,29 +45,29 @@ public class CommandLineArgumentsParser {
             }
         }
 
-        for (var option : options) {
+        for (var option : options)
             if (option.required && !result.haveValue(option))
-                throw new CommandLineArgumentsParseException(notSettedRequiredParamExceptionText(option.param));
-        }
+                result.addError(notSettedRequiredParamExceptionText(option.param));
 
         return result;
     }
 
-    private void exitIfOnlyHelpParam(String[] args) throws CommandLineArgumentsParseException {
+    private String exitIfOnlyHelpParam(String[] args) {
         if (Arrays.stream(args)
                 .anyMatch(s -> s.contains("-help")
                         || s.contains("-h")
                         || s.contains("-?")))
-            throw new CommandLineArgumentsParseException(helpExceptionText());
+            return helpExceptionText();
 
         if (args.length == 1
                 && (args[0].equals("?")
                 || args[0].equals("h")
                 || args[0].contains("help")))
-            throw new CommandLineArgumentsParseException(helpExceptionText());
+            return helpExceptionText();
 
         if (args.length == 0)
-            throw new CommandLineArgumentsParseException(helpExceptionText());
+            return helpExceptionText();
+        return null;
     }
 
     public void printHelp() {
