@@ -2,16 +2,19 @@ package com.newbilius.HabrStatisticCollector;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
+import com.newbilius.HabrStatisticCollector.AnalyticsGenerators.IAnalyticsGenerator;
 import com.newbilius.HabrStatisticCollector.CommandLineParser.CommandLineArgumentsParser;
 import com.newbilius.HabrStatisticCollector.CommandLineParser.CommandLineArgumentsParserResult;
 import com.newbilius.HabrStatisticCollector.CommandLineParser.Option;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
+import org.reflections.Reflections;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -39,6 +42,19 @@ public class HabrStatisticCollector {
                 var reader = new JsonReader(new FileReader(jsonFileForLoading));
                 parsedItems = gson.fromJson(reader, parsedItems.getClass());
             } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        var generators = new Reflections("com.newbilius").getSubTypesOf(IAnalyticsGenerator.class);
+        for (var generator : generators) {
+            try {
+                var generatorInstance = generator.getDeclaredConstructor().newInstance();
+                generatorInstance.generate(parsedItems);
+            } catch (NoSuchMethodException
+                    | IllegalAccessException
+                    | InstantiationException
+                    | InvocationTargetException e) {
                 e.printStackTrace();
             }
         }
