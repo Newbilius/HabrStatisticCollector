@@ -1,7 +1,5 @@
 package com.newbilius.HabrStatisticCollector;
 
-import com.google.gson.Gson;
-import com.google.gson.stream.JsonReader;
 import com.newbilius.HabrStatisticCollector.AnalyticsGenerators.IAnalyticsGenerator;
 import com.newbilius.HabrStatisticCollector.CommandLineParser.CommandLineArgumentsParser;
 import com.newbilius.HabrStatisticCollector.CommandLineParser.CommandLineArgumentsParserResult;
@@ -10,12 +8,8 @@ import com.newbilius.HabrStatisticCollector.HabrDataLoader.HabrItem;
 import com.newbilius.HabrStatisticCollector.HabrDataLoader.HabrStatisticLoader;
 import org.reflections.Reflections;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
-import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 
 public class HabrStatisticCollector {
@@ -36,9 +30,9 @@ public class HabrStatisticCollector {
             parsedItems = new HabrStatisticLoader(url, yearFrom, yearTo, skipTags,
                     HabrStatisticCollector::print).loadAndParseData();
             if (saveJson)
-                saveParsedItems(parsedItems);
+                HabrDataJsonFileManager.saveParsedItems("ARTICLES.json", parsedItems);
         } else
-            parsedItems = loadDataFromJsonFile(parsedItems);
+            parsedItems = HabrDataJsonFileManager.loadDataFromJsonFile(jsonFileForLoading);
 
         callStatisticGenerators(parsedItems);
     }
@@ -57,27 +51,6 @@ public class HabrStatisticCollector {
                     | InvocationTargetException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    private static HabrItem[] loadDataFromJsonFile(HabrItem[] parsedItems) {
-        Gson gson = new Gson();
-        try {
-            var reader = new JsonReader(new FileReader(jsonFileForLoading, StandardCharsets.UTF_8));
-            parsedItems = gson.fromJson(reader, parsedItems.getClass());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return parsedItems;
-    }
-
-    private static void saveParsedItems(HabrItem[] parsedItems) {
-        var json = new Gson().toJson(parsedItems);
-        try (PrintWriter pw = new PrintWriter("ARTICLES.json",
-                StandardCharsets.UTF_8)) {
-            pw.println(json);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -111,9 +84,8 @@ public class HabrStatisticCollector {
         }
 
         if (cmd.haveError()) {
-            for (var error : cmd.getErrors()) {
+            for (var error : cmd.getErrors())
                 print(error);
-            }
             argsParser.printHelp();
             System.exit(1);
         }
