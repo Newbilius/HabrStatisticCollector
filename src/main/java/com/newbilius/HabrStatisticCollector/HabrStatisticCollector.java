@@ -82,7 +82,7 @@ public class HabrStatisticCollector {
     private static void prepareOptions(String[] args) {
         var argsParser = new CommandLineArgumentsParser();
 
-        var urlOption = new Option("url", true, true, "путь к блогу (пример: https://habr.com/company/skbkontur/)");
+        var urlOption = new Option("url", false, true, "путь к блогу (пример: https://habr.com/company/skbkontur/)");
         argsParser.addOption(urlOption);
 
         var yearFromOption = new Option("yearFrom", false, true, "год начала парсинга (пример: 2018, по-умолчанию - текущий год)");
