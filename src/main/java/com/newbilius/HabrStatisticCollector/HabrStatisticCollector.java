@@ -12,9 +12,11 @@ import org.reflections.Reflections;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 
 public class HabrStatisticCollector {
@@ -62,9 +64,9 @@ public class HabrStatisticCollector {
     private static HabrItem[] loadDataFromJsonFile(HabrItem[] parsedItems) {
         Gson gson = new Gson();
         try {
-            var reader = new JsonReader(new FileReader(jsonFileForLoading));
+            var reader = new JsonReader(new FileReader(jsonFileForLoading, StandardCharsets.UTF_8));
             parsedItems = gson.fromJson(reader, parsedItems.getClass());
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return parsedItems;
@@ -72,9 +74,10 @@ public class HabrStatisticCollector {
 
     private static void saveParsedItems(HabrItem[] parsedItems) {
         var json = new Gson().toJson(parsedItems);
-        try (PrintWriter pw = new PrintWriter("ARTICLES.json")) {
+        try (PrintWriter pw = new PrintWriter("ARTICLES.json",
+                StandardCharsets.UTF_8)) {
             pw.println(json);
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
