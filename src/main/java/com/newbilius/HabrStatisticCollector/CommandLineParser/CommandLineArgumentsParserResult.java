@@ -1,7 +1,5 @@
 package com.newbilius.HabrStatisticCollector.CommandLineParser;
 
-import com.newbilius.HabrStatisticCollector.Option;
-
 import java.util.HashMap;
 
 public class CommandLineArgumentsParserResult {

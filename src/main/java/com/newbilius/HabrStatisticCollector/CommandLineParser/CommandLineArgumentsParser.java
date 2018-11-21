@@ -1,8 +1,7 @@
 package com.newbilius.HabrStatisticCollector.CommandLineParser;
 
-import com.newbilius.HabrStatisticCollector.Option;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class CommandLineArgumentsParser {
     private ArrayList<Option> options = new ArrayList<>();
@@ -13,6 +12,8 @@ public class CommandLineArgumentsParser {
 
     public CommandLineArgumentsParserResult parse(String[] args)
             throws CommandLineArgumentsParseException {
+
+        exitIfOnlyHelpParam(args);
 
         var result = new CommandLineArgumentsParserResult();
         for (var i = 0; i < args.length; i++) {
@@ -46,6 +47,23 @@ public class CommandLineArgumentsParser {
         return result;
     }
 
+    private void exitIfOnlyHelpParam(String[] args) throws CommandLineArgumentsParseException {
+        if (Arrays.stream(args)
+                .anyMatch(s -> s.contains("-help")
+                        || s.contains("-h")
+                        || s.contains("-?")))
+            throw new CommandLineArgumentsParseException(helpExceptionText());
+
+        if (args.length == 1
+                && (args[0].equals("?")
+                || args[0].equals("h")
+                || args[0].contains("help")))
+            throw new CommandLineArgumentsParseException(helpExceptionText());
+
+        if (args.length == 0)
+            throw new CommandLineArgumentsParseException(helpExceptionText());
+    }
+
     public void printHelp() {
         printHelpHeader();
         for (var option : options)
@@ -53,6 +71,11 @@ public class CommandLineArgumentsParser {
     }
 
     //выделены для потенциальной локализации
+
+    @SuppressWarnings("WeakerAccess")
+    protected String helpExceptionText() {
+        return "Помощь по использованию";
+    }
 
     @SuppressWarnings("WeakerAccess")
     protected String notSettedRequiredParamExceptionText(String arg) {
@@ -71,7 +94,7 @@ public class CommandLineArgumentsParser {
 
     @SuppressWarnings("WeakerAccess")
     protected String getHelpTextLine(Option option) {
-        return String.format("%-30s\t\t\t%s%s",
+        return String.format("%-20s\t\t\t%s%s",
                 "-" + option.param + (option.withArgs ? " <аргумент>" : ""),
                 option.required ? "[обязательный] " : "",
                 option.description);
