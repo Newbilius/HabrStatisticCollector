@@ -10,7 +10,6 @@ import com.newbilius.HabrStatisticCollector.HabrDataLoader.HabrItem;
 import com.newbilius.HabrStatisticCollector.HabrDataLoader.HabrStatisticLoader;
 import org.reflections.Reflections;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
