@@ -1,4 +1,4 @@
-package com.newbilius.HabrStatisticCollector;
+package com.newbilius.HabrStatisticCollector.CommandLineParser;
 
 public class Option {
     public final String param;
