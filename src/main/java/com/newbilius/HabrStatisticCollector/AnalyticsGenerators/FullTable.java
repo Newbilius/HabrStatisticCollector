@@ -12,10 +12,10 @@ public class FullTable implements IAnalyticsGenerator {
             try (var csvWriter = CSVWriteHelper.createCSVWriter("Статьи с основными параметрами.csv")) {
                 csvWriter.writeNext(new String[]{
                         "Заголовок",
-                        "Плюсов",
+                        "Плюсы",
                         "Закладки",
-                        "Комментариев",
-                        "Просмотров",
+                        "Комментарии",
+                        "Просмотры",
                         "URL",
                         "Автор",
                 });

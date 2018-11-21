@@ -15,6 +15,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -49,8 +50,10 @@ public class HabrStatisticCollector {
         var generators = new Reflections("com.newbilius").getSubTypesOf(IAnalyticsGenerator.class);
         for (var generator : generators) {
             try {
-                var generatorInstance = generator.getDeclaredConstructor().newInstance();
-                generatorInstance.generate(parsedItems);
+                if (!Modifier.isAbstract(generator.getModifiers())) {
+                    var generatorInstance = generator.getDeclaredConstructor().newInstance();
+                    generatorInstance.generate(parsedItems);
+                }
             } catch (NoSuchMethodException
                     | IllegalAccessException
                     | InstantiationException
