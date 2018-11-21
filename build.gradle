@@ -1,0 +1,34 @@
+apply plugin: 'java'
+apply plugin: 'application'
+mainClassName = "com.newbilius.HabrStatisticCollector.HabrSC"
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+version '1.0'
+sourceCompatibility = 1.11
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "com.google.code.gson:gson:2.8.0"
+    compile 'org.jsoup:jsoup:1.10.2'
+    compile 'net.sf.opencsv:opencsv:2.3'
+}
+
+run {
+    if (project.hasProperty("appArgs")) {
+        args Eval.me(appArgs)
+    }
+}
+
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+}
