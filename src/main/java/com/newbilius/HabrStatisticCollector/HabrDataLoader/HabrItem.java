@@ -1,4 +1,4 @@
-package com.newbilius.HabrStatisticCollector;
+package com.newbilius.HabrStatisticCollector.HabrDataLoader;
 
 public class HabrItem {
     public String Title;

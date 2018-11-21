@@ -1,7 +1,7 @@
 package com.newbilius.HabrStatisticCollector.AnalyticsGenerators;
 
 import com.newbilius.HabrStatisticCollector.CSVWriteHelper;
-import com.newbilius.HabrStatisticCollector.HabrItem;
+import com.newbilius.HabrStatisticCollector.HabrDataLoader.HabrItem;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -36,17 +36,20 @@ public abstract class SummaryBySomethingInfo implements IAnalyticsGenerator {
     private void prepareInfo(HabrItem[] items) {
         for (var item : items) {
             var values = getSomethingValues(item);
+            if (values == null)
+                continue;
+
             for (var value : values) {
                 var valueInLowerKeys = value.toLowerCase();
 
                 if (!somethingInfo.containsKey(valueInLowerKeys))
                     somethingInfo.put(valueInLowerKeys, new SomethingInfo(value));
 
-                var hubInfo = somethingInfo.get(valueInLowerKeys);
-                hubInfo.Bookmarks += item.Bookmarks;
-                hubInfo.Views += item.Views;
-                hubInfo.Comments += item.Comments;
-                hubInfo.Score += item.Score;
+                var somethingInfo = this.somethingInfo.get(valueInLowerKeys);
+                somethingInfo.Bookmarks += item.Bookmarks;
+                somethingInfo.Views += item.Views;
+                somethingInfo.Comments += item.Comments;
+                somethingInfo.Score += item.Score;
             }
         }
     }

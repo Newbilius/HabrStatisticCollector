@@ -1,6 +1,6 @@
 package com.newbilius.HabrStatisticCollector.AnalyticsGenerators;
 
-import com.newbilius.HabrStatisticCollector.HabrItem;
+import com.newbilius.HabrStatisticCollector.HabrDataLoader.HabrItem;
 
 public class FullTable extends BaseAnalyticsGenerator {
     @Override

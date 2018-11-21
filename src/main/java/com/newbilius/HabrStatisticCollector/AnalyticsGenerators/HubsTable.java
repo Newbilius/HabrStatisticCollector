@@ -1,10 +1,6 @@
 package com.newbilius.HabrStatisticCollector.AnalyticsGenerators;
 
-import com.newbilius.HabrStatisticCollector.CSVWriteHelper;
-import com.newbilius.HabrStatisticCollector.HabrItem;
-
-import java.io.IOException;
-import java.util.HashMap;
+import com.newbilius.HabrStatisticCollector.HabrDataLoader.HabrItem;
 
 public class HubsTable extends SummaryBySomethingInfo {
     @Override
