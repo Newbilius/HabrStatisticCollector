@@ -83,10 +83,12 @@ public class HabrStatisticLoader {
                 parsedItems.add(parsedItem);
             }
 
-            //todo не учитываем ситуацию "дошли до последней страницы и дальше идти некуда"
-            return "https://habr.com" + page.select("a#next_page")
-                    .first()
-                    .attr("href");
+            var nextPage = page.select("a#next_page")
+                    .first();
+            if (nextPage != null)
+                return "https://habr.com" + nextPage.attr("href");
+            else
+                return "";
 
         } catch (IOException e) {
             e.printStackTrace();
