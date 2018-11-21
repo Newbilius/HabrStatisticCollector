@@ -5,7 +5,6 @@ import com.newbilius.HabrStatisticCollector.HabrItem;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.stream.Stream;
 
 public abstract class SummaryBySomethingInfo implements IAnalyticsGenerator {
     class SomethingInfo {
