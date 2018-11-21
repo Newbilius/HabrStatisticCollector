@@ -24,4 +24,4 @@
 # Чего интересненького в коде?
 
 * Собственная [парсилка параметров командной строки](src/main/java/com/newbilius/HabrStatisticCollector/CommandLineParser) - потому что нашлась куча вариантов, но все попадавшиеся не имели локализации, а я хотел русскую справку (ну и не без фатального недостатка конечно не обошлось)
-* [Генераторы статистики](src/main/java/com/newbilius/HabrStatisticCollector/AnalyticsGenerators) по уже скачанным данным вызываются рефлексией, так что для добавления своего генератора достаточно отнаследоваться от *IAnalyticsGenerator*
+* [Генераторы статистики](src/main/java/com/newbilius/HabrStatisticCollector/AnalyticsGenerators) по уже скачанным данным вызываются рефлексией, так что для добавления своего генератора достаточно отнаследоваться от **IAnalyticsGenerator**
