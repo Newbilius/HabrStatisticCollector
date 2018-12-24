@@ -72,7 +72,7 @@ public class HabrStatisticCollector {
         var skipTagsOption = new Option("skipTags", false, false, "не загружать каждую статью для получения тегов");
         argsParser.addOption(skipTagsOption);
 
-        var loadFromJsonOption = new Option("loadJson", false, true, "построить статистику по заранее загруженному JSON-файлу, аргумента - имя файла");
+        var loadFromJsonOption = new Option("loadJson", false, true, "построить статистику по заранее загруженному JSON-файлу, аргумент - имя файла");
         argsParser.addOption(loadFromJsonOption);
 
         CommandLineArgumentsParserResult cmd = argsParser.parse(args);
