@@ -9,7 +9,7 @@
 ![скриншот 1](readme_pics/data1.png)
 [крупный план скриншота 1](https://raw.githubusercontent.com/Newbilius/HabrStatisticCollector/master/readme_pics/data1.png)
 
-![скриншот 2](readme_pics/data1.png)
+![скриншот 2](readme_pics/data2.png)
 
 Внимательней посмотреть на получаемую информацию можно [вот тут](exampleData).
 
