@@ -6,10 +6,10 @@
 
 # Пример содержимого
 
-![скриншот 1](readme_pics/pic1.png)
-[крупный план скриншота 1](https://raw.githubusercontent.com/Newbilius/HabrStatisticCollector/master/readme_pics/pic1.png)
+![скриншот 1](readme_pics/data1.png)
+[крупный план скриншота 1](https://raw.githubusercontent.com/Newbilius/HabrStatisticCollector/master/readme_pics/data1.png)
 
-![скриншот 2](readme_pics/pic2.png)
+![скриншот 2](readme_pics/data1.png)
 
 Внимательней посмотреть на получаемую информацию можно [вот тут](exampleData).
 
@@ -19,7 +19,7 @@
 Готовая программа уже собрана из исходников, [скачать можно тут](https://github.com/Newbilius/HabrStatisticCollector/releases).
 Там же есть и примеры использования.
 
-![скриншот 2](readme_pics/pic3.png)
+![скриншот 2](readme_pics/readme.png)
 
 # Чего интересненького в коде?
 
