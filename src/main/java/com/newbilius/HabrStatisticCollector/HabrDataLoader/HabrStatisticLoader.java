@@ -40,7 +40,10 @@ public class HabrStatisticLoader {
                             ArrayList<HabrItem> parsedItems) {
         try {
             loadingProcessCallback.print(String.format("Запрашиваем страницу %s", url));
-            var page = Jsoup.connect(url).get();
+            var page = Jsoup
+                    .connect(url)
+                    .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+                    .get();
             var items = page.select("ul.content-list li.content-list__item article");
             for (var item : items) {
                 var parsedItem = new HabrItem();
