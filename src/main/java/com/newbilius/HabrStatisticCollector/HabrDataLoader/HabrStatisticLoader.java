@@ -41,7 +41,7 @@ public class HabrStatisticLoader {
         try {
             loadingProcessCallback.print(String.format("Запрашиваем страницу %s", url));
             var page = Jsoup.connect(url).get();
-            var items = page.select("div.company_blog ul.content-list li.content-list__item article");
+            var items = page.select("ul.content-list li.content-list__item article");
             for (var item : items) {
                 var parsedItem = new HabrItem();
                 var articleUrl = item.select("h2.post__title a").first().attr("href");
