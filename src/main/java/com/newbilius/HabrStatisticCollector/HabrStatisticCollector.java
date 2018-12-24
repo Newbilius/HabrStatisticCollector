@@ -60,10 +60,10 @@ public class HabrStatisticCollector {
         var urlOption = new Option("url", false, true, "путь к блогу (пример: https://habr.com/company/skbkontur/)");
         argsParser.addOption(urlOption);
 
-        var yearFromOption = new Option("yearFrom", false, true, "год начала парсинга (пример: 2018, по-умолчанию - текущий год)");
+        var yearFromOption = new Option("yearFrom", false, true, "год начала парсинга (пример: 2018, по умолчанию - текущий год)");
         argsParser.addOption(yearFromOption);
 
-        var yearToOption = new Option("yearTo", false, true, "год окончания парсинга (пример: 2017, по-умолчанию - текущий год-1)");
+        var yearToOption = new Option("yearTo", false, true, "год окончания парсинга, НЕ включительно (по умолчанию - текущий год-1)");
         argsParser.addOption(yearToOption);
 
         var noJsonOption = new Option("notSaveJson", false, false, "не сохранять JSON с промежуточными данными");
@@ -72,7 +72,7 @@ public class HabrStatisticCollector {
         var skipTagsOption = new Option("skipTags", false, false, "не загружает каждую статью для получения тегов");
         argsParser.addOption(skipTagsOption);
 
-        var loadFromJsonOption = new Option("loadJson", false, true, "построить статистику по заранее загруженному JSON");
+        var loadFromJsonOption = new Option("loadJson", false, true, "построить статистику по заранее загруженному JSON-файлу");
         argsParser.addOption(loadFromJsonOption);
 
         CommandLineArgumentsParserResult cmd = argsParser.parse(args);
