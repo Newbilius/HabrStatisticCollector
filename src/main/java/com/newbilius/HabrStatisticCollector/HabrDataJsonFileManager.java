@@ -26,7 +26,7 @@ public class HabrDataJsonFileManager {
 
     public static void saveParsedItems(String fileName, HabrItem[] parsedItems) {
         var json = new Gson().toJson(parsedItems);
-        try (PrintWriter pw = new PrintWriter("ARTICLES.json",
+        try (PrintWriter pw = new PrintWriter(fileName,
                 StandardCharsets.UTF_8)) {
             pw.println(json);
         } catch (IOException e) {
