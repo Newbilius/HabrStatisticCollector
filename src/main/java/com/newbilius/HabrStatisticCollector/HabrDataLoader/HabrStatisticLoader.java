@@ -106,8 +106,18 @@ public class HabrStatisticLoader {
                     .replace(",", ".");
             return (int) (Float.parseFloat(changedText) * 1000);
         }
+        var isNegative = false;
+        if (text.contains("–")) {
+            text = text
+                    .replace("–", "");
+            isNegative = true;
+        }
+
         if (text.isBlank())
             return 0;
+
+        if (isNegative)
+            return 0 - Integer.parseInt(text);
         return Integer.parseInt(text);
     }
 
