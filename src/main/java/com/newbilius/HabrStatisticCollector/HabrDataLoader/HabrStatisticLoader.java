@@ -4,7 +4,12 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
 
 public class HabrStatisticLoader {
     private final String url;
@@ -48,9 +53,12 @@ public class HabrStatisticLoader {
             for (var item : items) {
                 var parsedItem = new HabrItem();
                 var articleUrl = item.select("h2.post__title a").first().attr("href");
-                var date = item.select("span.post__time").text();
+                var date = item.select("span.post__time").text().toLowerCase();
 
-                if (parsedItems.isEmpty() && !date.contains(yearFrom)) {
+                if (parsedItems.isEmpty()
+                        && !date.contains(yearFrom)
+                        && !date.contains("сегодня")
+                        && !date.contains("вчера")) {
                     loadingProcessCallback.print("Пропустили статью - пока не дошли до начального года");
                     continue;
                 }
@@ -63,7 +71,7 @@ public class HabrStatisticLoader {
 
                 parsedItem.Title = item.select("h2.post__title").text();
                 parsedItem.Author = item.select("header span.user-info__nickname").text();
-                parsedItem.DateTime = date;
+                parsedItem.DateTime = PrepareDateTime(date);
                 parsedItem.Url = articleUrl;
                 parsedItem.Bookmarks = parseInt(item.select("span.bookmark__counter").text());
                 parsedItem.Views = parseInt(item.select("span.post-stats__views-count").text());
@@ -96,6 +104,29 @@ public class HabrStatisticLoader {
         } catch (IOException e) {
             e.printStackTrace();
             return "";
+        }
+    }
+
+    private final SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd.MM.yyyy");
+    private SimpleDateFormat inputDateFormat = new SimpleDateFormat("dd MMMM yyyy", new Locale("ru"));
+    private final Date currentDate = new Date();
+    private Date yesterdayDate;
+
+    private String PrepareDateTime(String date) {
+        if (date.contains("сегодня"))
+            return outputDateFormat.format(currentDate);
+        if (date.contains("вчера")) {
+            if (yesterdayDate == null) {
+                Calendar cal = Calendar.getInstance();
+                cal.add(Calendar.DAY_OF_YEAR, -1);
+                yesterdayDate = cal.getTime();
+            }
+            return outputDateFormat.format(yesterdayDate);
+        }
+        try {
+            return outputDateFormat.format(inputDateFormat.parse(date));
+        } catch (ParseException e) {
+            return date;
         }
     }
 

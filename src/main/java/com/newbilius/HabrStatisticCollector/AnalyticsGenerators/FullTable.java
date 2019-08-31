@@ -17,7 +17,8 @@ public class FullTable extends BaseAnalyticsGenerator {
                 "Комментарии",
                 "Просмотры",
                 "URL",
-                "Автор"
+                "Автор",
+                "Дата"
         };
     }
 
@@ -30,7 +31,8 @@ public class FullTable extends BaseAnalyticsGenerator {
                 String.valueOf(item.Comments),
                 String.valueOf(item.Views),
                 item.Url,
-                item.Author
+                item.Author,
+                item.DateTime
         };
     }
 }
